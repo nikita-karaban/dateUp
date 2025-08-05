@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <html>
 <body>
     <div id="main">
@@ -20,7 +20,7 @@
 
     <div id="calendarContainer" style="display: none;">
         <img src="https://media.tenor.com/Jud4LG0uSz4AAAAM/hanna-ball-kitten-soft-fluffy-kitty-cat-paws.gif" alt="Calendar Image" style="width: 200px; height: auto; margin-bottom: 20px;">
-        <h2>Когда у тебя получиться?</h2>
+        <h2>Когда у тебя получится?</h2>
         <div class="calendar-inner">
             <input type="date" id="dateInput" />
             <input type="time" id="timeInput" />
@@ -263,10 +263,10 @@
             var selectedTime = document.getElementById("timeInput").value;
             if (selectedDate && selectedTime) {
                 document.getElementById("calendarContainer").style.display = "none";
-                document.getElementById("summaryText").innerText = "Мы сможем встетиться : " + selectedDate + " в " + selectedTime;
+                document.getElementById("summaryText").innerText = "Мы сможем встретиться : " + selectedDate + " в " + selectedTime;
                 document.getElementById("summaryContainer").style.display = "flex"; 
             } else {
-                alert("Пожалуйста выберете дату и время");
+                alert("Пожалуйста, выберите дату и время");
             }
         });
     </script>
