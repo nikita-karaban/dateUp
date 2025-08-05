@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<html>
+<body>
+    <div id="main">
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <br />
+        <h1>Ты пойдешь со мной на свидание?</h1>
+        <img id="valentineImage" src="https://i.pinimg.com/564x/e8/f9/6b/e8f96b839d14d6682d77afe8b2a746f5.jpg" style="width: 400px; height: auto; margin-bottom: 10px;">
+        <br />
+        <br />
+        <br />
+        <button id="yesButton">Да</button>
+        <button id="no">Нет</button>
+    </div>
+
+    <div id="calendarContainer" style="display: none;">
+        <img src="https://media.tenor.com/Jud4LG0uSz4AAAAM/hanna-ball-kitten-soft-fluffy-kitty-cat-paws.gif" alt="Calendar Image" style="width: 200px; height: auto; margin-bottom: 20px;">
+        <h2>Когда у тебя получиться?</h2>
+        <div class="calendar-inner">
+            <input type="date" id="dateInput" />
+            <input type="time" id="timeInput" />
+            <br /><br />
+            <button id="confirmDateButton">Ураааа!!!</button>
+        </div>
+    </div>
+
+    <div id="summaryContainer" style="display: none;">
+        <img src="https://i.pinimg.com/originals/ca/08/db/ca08dbeee8a7605d1ddc41fb2517193e.gif" alt="Sample GIF" style="width: 200px; height: auto; margin-bottom: 20px;">
+        <h2>Увидимся!!!</h2>
+        <p id="summaryText"></p>
+    </div>
+
+    <style>
+        body {
+            background: linear-gradient(to bottom, #f5cac3, #f7ede2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        #main, #calendarContainer, #summaryContainer {
+            text-align: center;
+            vertical-align: middle;
+            width: 100%;
+        }
+
+        h1 {
+            color: #ff477e;
+        }
+
+        #yesButton {
+            background-color: #06d6a0;
+            transition: transform 0.3s;
+            margin-right: 10px;
+            width: 120px;
+            font-size: 30px;
+            height: 40px;
+            color: #fff;
+            margin-left: -140px;
+        }
+
+        #no {
+            background-color: #ef476f;
+            transition: all 0.5s ease;
+            margin-left: 10px;
+            width: auto;
+            padding: 10px 20px;
+            font-size: 18px;
+            height: auto;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-align: center;
+            display: inline-block;
+            position: absolute;
+        }
+
+        #calendarContainer {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+            #summaryContainer {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        text-align: center;
+        font-family: 'Verdana', sans-serif; 
+         }
+
+        #calendarContainer input, #confirmDateButton {
+            font-size: 22px;
+            padding: 10px;
+            margin: 10px;
+            width: 80%;
+        }
+
+        #confirmDateButton {
+            background-color: #06d6a0;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 80%;
+        }
+
+        #summaryText {
+            font-size: 20px;
+            color: #333;
+        }
+    </style>
+
+    <script>
+        document.getElementById("yesButton").addEventListener("click", showAlert);
+
+        function showAlert() {
+            document.getElementById("main").style.display = "none"; 
+            document.getElementById("calendarContainer").style.display = "flex"; 
+        }
+
+        const yesButton = document.getElementById("yesButton");
+        const no = document.getElementById("no");
+        const valentineImage = document.getElementById("valentineImage");
+
+        const noTexts = ["Ты уверена?", "Но почекмуу", "Пожалуууйста :("];
+        const imageSources = [
+            "https://content.imageresizer.com/images/memes/Sad-Cat-Looking-At-Phone-meme-4.jpg",
+            "https://i.pinimg.com/280x280_RS/fa/dc/ee/fadceefa6e7647c2a71e3bef47544053.jpg",
+            "https://p3.itc.cn/images01/20220721/3e78b2b6caa146b5aa1db7f6d9a4a7ff.jpeg",
+            "https://i.pinimg.com/736x/cb/d8/3b/cbd83b534a315e809a9da2b8cd3ac3bf.jpg"
+        ];
+        let isMoving = false;
+        let moveTimeout;
+
+        function findSafeDirection(buttonRect, mouseX, mouseY) {
+          const directions = [
+              { x: -1, y: -1 }, // верх-лево
+              { x: 0, y: -1 },  // верх
+              { x: 1, y: -1 },   // верх-право
+              { x: -1, y: 0 },   // лево
+              { x: 1, y: 0 },    // право
+              { x: -1, y: 1 },   // низ-лево
+              { x: 0, y: 1 },    // низ
+              { x: 1, y: 1 }     // низ-право
+          ];
+
+          // Проверяем доступные направления
+          const safeDirections = directions.filter(dir => {
+              const newX = buttonRect.left + dir.x * 150;
+              const newY = buttonRect.top + dir.y * 150;
+              return newX > 0 && 
+                    newY > 0 && 
+                    newX < window.innerWidth - buttonRect.width && 
+                    newY < window.innerHeight - buttonRect.height;
+          });
+
+          // Если есть безопасные направления - выбираем случайное
+          if (safeDirections.length > 0) {
+              return safeDirections[Math.floor(Math.random() * safeDirections.length)];
+          }
+          
+          // Если все направления заблокированы - двигаем к центру
+          return {
+              x: (window.innerWidth/2 - buttonRect.left) > 0 ? 1 : -1,
+              y: (window.innerHeight/2 - buttonRect.top) > 0 ? 1 : -1
+          };
+        }
+
+        no.addEventListener("click", change);
+        no.addEventListener("mouseover", (e) => {
+          if (isMoving) return;
+            isMoving = true;
+            
+            clearTimeout(moveTimeout);
+            moveTimeout = setTimeout(() => {
+                isMoving = false;
+            }, 300);
+            
+            const buttonRect = no.getBoundingClientRect();
+
+            const maxX = window.innerWidth - buttonRect.width;
+            const maxY = window.innerHeight - buttonRect.height;
+            
+            // Рассчитываем новую позицию (убегание от курсора)
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            const isAtEdge = 
+              buttonRect.left <= 50 || 
+              buttonRect.top <= 50 || 
+              buttonRect.right >= window.innerWidth - 50 || 
+              buttonRect.bottom >= window.innerHeight - 50;
+
+            let newX, newY;
+
+            if (isAtEdge) {
+              // В углу или у края - используем алгоритм поиска безопасного пути
+              const direction = findSafeDirection(buttonRect, mouseX, mouseY);
+              newX = buttonRect.left + direction.x * 150;
+              newY = buttonRect.top + direction.y * 150;
+            } else {
+              // Вектор от мыши к центру кнопки
+              const buttonCenterX = buttonRect.left + buttonRect.width / 2;
+              const buttonCenterY = buttonRect.top + buttonRect.height / 2;
+              
+              const deltaX = buttonCenterX - mouseX;
+              const deltaY = buttonCenterY - mouseY;
+              
+              // Нормализуем вектор
+              const length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+              const dirX = length ? deltaX / length : 0;
+              const dirY = length ? deltaY / length : 0;
+              
+              // Смещение (150px в направлении от мыши)
+              const moveDistance = 150;
+              newX = buttonRect.left + dirX * 150;
+              newY = buttonRect.top + dirY * 150;
+            }
+
+            newX = Math.max(0, Math.min(maxX, newX));
+            newY = Math.max(0, Math.min(maxY, newY));
+            
+            // Применяем новую позицию
+            no.style.left = newX + "px";
+            no.style.top = newY + "px";
+        })
+
+
+        function change() {
+            const randomIndex = Math.floor(Math.random() * noTexts.length);
+            const randomText = noTexts[randomIndex];
+            no.innerText = randomText;
+
+            const i = Math.floor(Math.random() * 1000) + 1;
+            const j = Math.floor(Math.random() * 700) + 1;
+            no.style.left = i + "px";
+            no.style.top = j + "px";
+
+            const currentWidth = yesButton.offsetWidth;
+            const currentHeight = yesButton.offsetHeight;
+            yesButton.style.width = currentWidth + 30 + "px";
+            yesButton.style.height = currentHeight + 10 + "px";
+
+            const randomImageIndex = Math.floor(Math.random() * imageSources.length);
+            valentineImage.src = imageSources[randomImageIndex];
+        }
+
+        document.getElementById("confirmDateButton").addEventListener("click", function () {
+            var selectedDate = document.getElementById("dateInput").value;
+            var selectedTime = document.getElementById("timeInput").value;
+            if (selectedDate && selectedTime) {
+                document.getElementById("calendarContainer").style.display = "none";
+                document.getElementById("summaryText").innerText = "Мы сможем встетиться : " + selectedDate + " в " + selectedTime;
+                document.getElementById("summaryContainer").style.display = "flex"; 
+            } else {
+                alert("Пожалуйста выберете дату и время");
+            }
+        });
+    </script>
+</body>
+</html>
